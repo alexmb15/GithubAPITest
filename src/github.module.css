@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+}
+
+.container div {
+  padding: 10px;
+}
+
+.container li {
+  cursor: pointer;
+}
+
+.selected {
+  background-color: gray;
+}
