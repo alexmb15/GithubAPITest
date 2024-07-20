@@ -25,6 +25,7 @@ export const Timer = (props: TimerPropsType) => {
             console.log("tick");
         }, 1000);
         return () => {
+            console.log("Clear interval")
             clearInterval(intervalId);
         };
     }, [props.userId]);

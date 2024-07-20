@@ -22,6 +22,7 @@ const UserDetails: React.FC<UserDetailsPropsType> = ({ selectedUser }) => {
     const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
+        console.log("Selected User: " + selectedUser?.id)
         if (selectedUser) {
             setIsFetching(true);
             instance.get<UserType>(`users/${selectedUser.login}`).then(res => {
@@ -29,6 +30,10 @@ const UserDetails: React.FC<UserDetailsPropsType> = ({ selectedUser }) => {
                 setUserDetails(res.data);
                 setIsFetching(false);
             });
+        }
+        return () => {
+            console.log("Component will unmount")
+            setUserDetails(null)
         }
     }, [selectedUser]);
 

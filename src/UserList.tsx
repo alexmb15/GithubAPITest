@@ -14,7 +14,7 @@ export type SearchUserType = {
 type UserListPropsType = {
     searchTerm: string
     selectedUser: SearchUserType | null
-    setSelectedUser: (user: SearchUserType) => void
+    setSelectedUser: (user: SearchUserType | null) => void
 }
 const UserList: React.FC<UserListPropsType> = ({ searchTerm, selectedUser, setSelectedUser }) => {
     const [users, setUsers] = useState<Array<SearchUserType>>([]);
@@ -25,6 +25,9 @@ const UserList: React.FC<UserListPropsType> = ({ searchTerm, selectedUser, setSe
             setUsers(res.data.items);
             setIsFetching(false);
         });
+        return () => {
+            setSelectedUser(null)
+        }
     }, [searchTerm]);
 
     return (
