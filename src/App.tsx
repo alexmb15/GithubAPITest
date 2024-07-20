@@ -27,7 +27,15 @@ function GitHubApp() {
                 <Box style={{ flexShrink: 0, position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'white' }}>
                     <Box display="flex" alignItems="center">
                         <SearchForm value={searchTerm} onSubmit={setSearchTerm} />
-                        <Button variant="contained" color="primary" onClick={() => setSearchTerm(initialValue)} size="small" style={{ marginLeft: '8px' }}>Reset</Button>
+                        <Button variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    setSelectedUser(null)
+                                    setSearchTerm(initialValue)}
+                                }
+                                size="small"
+                                style={{ marginLeft: '8px' }}> Reset
+                        </Button>
                     </Box>
                 </Box>
                 <Grid container spacing={3} style={{ flexGrow: 1, overflow: 'hidden' }}>

@@ -32,7 +32,7 @@ const UserDetails: React.FC<UserDetailsPropsType> = ({ selectedUser }) => {
             });
         }
         return () => {
-            console.log("Component will unmount")
+            console.log("Component Timer will unmount: setUserDetails(null)")
             setUserDetails(null)
         }
     }, [selectedUser]);

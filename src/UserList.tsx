@@ -26,6 +26,7 @@ const UserList: React.FC<UserListPropsType> = ({ searchTerm, selectedUser, setSe
             setIsFetching(false);
         });
         return () => {
+            console.log("Component UserList will unmount: setSelectedUser(null)")
             setSelectedUser(null)
         }
     }, [searchTerm]);
