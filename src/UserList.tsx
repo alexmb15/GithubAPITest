@@ -1,7 +1,6 @@
-import style from "./github.module.css";
-import React, {useEffect, useState} from "react";
-import {instance} from "./api";
-import Preloader from "./Preloader/Preloader";
+import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Box, CircularProgress } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { instance } from "./api";
 
 type SearchResultType = {
     items: Array<SearchUserType>
@@ -17,34 +16,38 @@ type UserListPropsType = {
     selectedUser: SearchUserType | null
     setSelectedUser: (user: SearchUserType) => void
 }
-const UserList: React.FC<UserListPropsType> = ({searchTerm, selectedUser, setSelectedUser}) => {
-    const [users, setUsers] = useState<Array<SearchUserType>>([])
-    const [isFetching, setIsFetching] = useState(true)
+const UserList: React.FC<UserListPropsType> = ({ searchTerm, selectedUser, setSelectedUser }) => {
+    const [users, setUsers] = useState<Array<SearchUserType>>([]);
+    const [isFetching, setIsFetching] = useState(true);
 
     useEffect(() => {
-        console.log(">>> UserList: Search users: " + searchTerm)
         instance.get<SearchResultType>(`search/users?q=${searchTerm}`).then(res => {
-            setUsers(res.data.items)
-            setIsFetching(false)
-        })
-        return () => {
-            setIsFetching(true)
-        }
-    }, [searchTerm])
+            setUsers(res.data.items);
+            setIsFetching(false);
+        });
+    }, [searchTerm]);
 
-
-    return <div>
-        {isFetching ? <Preloader/> :
-            <div>
-                <ul>
-                    {users.map(u => <li key={u.id} className={selectedUser === u ? style.selected : ""}
-                                        onClick={() => {
-                                            setSelectedUser(u)
-                                        }}> {u.login} </li>)}
-                </ul>
-            </div>
-        }
-    </div>
+    return (
+        <Box>
+            {isFetching ? <CircularProgress /> :
+                <List>
+                    {users.map(u => (
+                        <ListItem
+                            key={u.id}
+                            selected={selectedUser?.id === u.id}
+                            onClick={() => setSelectedUser(u)}
+                            button
+                        >
+                            <ListItemAvatar>
+                                <Avatar src={u.avatar_url} />
+                            </ListItemAvatar>
+                            <ListItemText primary={u.login} />
+                        </ListItem>
+                    ))}
+                </List>
+            }
+        </Box>
+    );
 }
 
-export default UserList
+export default UserList;

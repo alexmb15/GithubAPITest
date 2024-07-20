@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {instance} from "./api";
-import {SearchUserType} from "./UserList";
-import {Timer} from "./Timer";
-import Preloader from "./Preloader/Preloader";
+import React, { useEffect, useState } from "react";
+import { instance } from "./api";
+import { SearchUserType } from "./UserList";
+import { Timer } from "./Timer";
+import { CircularProgress, Typography, Card, CardContent, Avatar, Box } from "@mui/material";
 
 type UserType = {
     login: string
@@ -15,47 +15,47 @@ type UserDetailsPropsType = {
     selectedUser: SearchUserType | null
 }
 
-const initialTimer = 10
-const UserDetails: React.FC<UserDetailsPropsType> = ({selectedUser}) => {
-    const [userDetails, setUserDetails] = useState<UserType | null>(null)
-    const [timer, setTimer] = useState(initialTimer)
-    const [isFetching, setIsFetching] = useState(false)
-
-    useEffect( () => {
-        console.log(">>> UserDetails: Selected user: get user data: " + selectedUser?.login)
-        if (!!selectedUser) {
-            setIsFetching(true)
-            instance.get<UserType>(`users/${selectedUser.login}`).then(res => {
-                setTimer(initialTimer)
-                setUserDetails(res.data)
-                setIsFetching(false)
-                console.log("isFetching = " + isFetching)
-            })
-        }
-        return () => {setIsFetching(false)}
-    }, [selectedUser])
+const initialTimer = 10;
+const UserDetails: React.FC<UserDetailsPropsType> = ({ selectedUser }) => {
+    const [userDetails, setUserDetails] = useState<UserType | null>(null);
+    const [timer, setTimer] = useState(initialTimer);
+    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
-        if(timer < 1)
-            setUserDetails(null)
-    }, [timer])
+        if (selectedUser) {
+            setIsFetching(true);
+            instance.get<UserType>(`users/${selectedUser.login}`).then(res => {
+                setTimer(initialTimer);
+                setUserDetails(res.data);
+                setIsFetching(false);
+            });
+        }
+    }, [selectedUser]);
 
-    if (isFetching){
-        return <Preloader/>
+    useEffect(() => {
+        if (timer < 1) setUserDetails(null);
+    }, [timer]);
+
+    if (isFetching) {
+        return <CircularProgress />;
     }
 
     return (
-        <div>
-            {userDetails && <>
-                    <Timer initialTimer={timer} onChange={setTimer} userId={userDetails.id} />
-                    <h2>{userDetails.login}</h2>
-                    <img src={userDetails.avatar_url} alt='avatar'/>
-                    <div>Followers: {userDetails.followers}</div>
-                </>
-
-            }
-        </div>
-    )
+        <Card style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <CardContent>
+                {userDetails && (
+                    <>
+                        <Timer initialTimer={timer} onChange={setTimer} userId={userDetails.id} />
+                        <Box display="flex" flexDirection="column" alignItems="center">
+                            <Avatar src={userDetails.avatar_url} alt='avatar' style={{ width: 200, height: 200 }} />
+                            <Typography variant="h4">{userDetails.login}</Typography>
+                            <Typography variant="body1">Followers: {userDetails.followers}</Typography>
+                        </Box>
+                    </>
+                )}
+            </CardContent>
+        </Card>
+    );
 }
 
-export default UserDetails
+export default UserDetails;

@@ -1,23 +1,36 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { TextField, Button, Box } from '@mui/material';
 
 type SearchFormPropsType = {
     value: string
     onSubmit: (searchTerm: string) => void
 }
 export const SearchForm = (props: SearchFormPropsType) => {
-    let [tempSearch, setTempSearch] = useState('')
+    let [tempSearch, setTempSearch] = useState('');
 
     useEffect(() => {
-        console.log(">>> SearchForm: Set temp search: " + props.value)
-        setTempSearch(props.value)
-    }, [props.value])
+        setTempSearch(props.value);
+    }, [props.value]);
 
     return (
-        <div>
-            <input placeholder='search' value={tempSearch} onChange={(e) => {
-                setTempSearch(e.currentTarget.value)
-            }}/>
-            <button onClick={() => props.onSubmit(tempSearch)}>Find</button>
-        </div>
-    )
+        <Box display="flex" alignItems="center">
+            <TextField
+                variant="outlined"
+                placeholder='Search'
+                value={tempSearch}
+                onChange={(e) => setTempSearch(e.currentTarget.value)}
+                margin="normal"
+                size="small"
+                style={{ flexGrow: 1, marginRight: '8px' }}
+            />
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => props.onSubmit(tempSearch)}
+                size="small"
+            >
+                Find
+            </Button>
+        </Box>
+    );
 }
